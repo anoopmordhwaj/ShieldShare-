@@ -1,0 +1,242 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+</head>
+<body>
+    <h2>My Folders</h2>
+<ul>
+    {% for folder in folders %}
+        <li><a href="{% url 'view_folder' folder.id %}">{{ folder.name }}</a></li>
+    {% endfor %}
+</ul>
+<a href="{% url 'create_folder' %}">➕ Create Folder</a>
+
+<h2>My Files</h2>
+<ul>
+    {% for file in files %}
+        <li>{{ file.name }} 
+            - <a href="{{ file.file.url }}" download>🔃Download</a>
+            - <a href="{% url 'rename_file' file.id %}">✏ Rename</a>
+            - <a href="{% url 'delete_file' file.id %}" onclick="return confirm('Are you sure?');">❌ Delete</a>
+            - <a href="{% url 'share_file' file.id %}">🔗 Share</a>
+        </li>
+    {% endfor %}
+</ul>
+<a href="{% url 'upload_file' %}">➕ Upload File</a>
+
+<h2>🔗 Shared Files</h2>
+<ul>
+    {% for file in shared_files %}
+        <li>
+            {{ file.name }} (Shared by {{ file.uploaded_by.username }})
+            - <a href="{{ file.file.url }}" download>Download</a>
+        </li>
+    {% empty %}
+        <li>No shared files yet.</li>
+    {% endfor %}
+</ul>
+
+    
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | FileShare</title>
+    <style>
+        :root {
+            --white-bg: #d1e8f2;
+            --light-gray: #f5f5f5;
+            --border-gray: #e0e0e0;
+            --text-dark: #333333;
+            --text-light: #777777;
+            --accent-red: #ff4d4d;
+            --accent-green: #2ecc71;
+            --accent-red-light: rgba(255, 77, 77, 0.08);
+            --accent-green-light: rgba(46, 204, 113, 0.08);
+            --shadow: 0 2px 10px rgba(0,0,0,0.05);
+            --card-radius: 12px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+        
+        body {
+            background-color: var(--white-bg);
+            color: var(--text-dark);
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h2 {
+            color: var(--accent-green);
+            margin: 1.5rem 0 1rem;
+            font-size: 1.5rem;
+            border-bottom: 2px solid var(--border-gray);
+            padding-bottom: 0.5rem;
+        }
+        
+        .dashboard-section {
+            background: rgb(251, 251, 251);
+            border: 1px solid var(--border-gray);
+            border-radius: var(--card-radius);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+        
+        ul.file-list {
+            list-style: none;
+            margin: 1rem 0;
+        }
+        
+        ul.file-list li {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--border-gray);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        ul.file-list li:last-child {
+            border-bottom: none;
+        }
+        
+        a {
+            color: rgb(93, 158, 219);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        a:hover {
+            color: var(--accent-red);
+        }
+        
+        .action-links {
+            display: flex;
+            gap: 15px;
+            margin-left: auto;
+        }
+        
+        .action-links a {
+            display: inline-block;
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+        
+        .action-links a:hover {
+            background: var(--light-gray);
+        }
+        
+        .btn-primary {
+            display: inline-block;
+            background-color: var(--accent-green);
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            font-weight: 600;
+            margin-top: 0.5rem;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary:hover {
+            background-color: #27ae60;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(46, 204, 113, 0.3);
+            color: white;
+        }
+        
+        .empty-state {
+            color: var(--text-light);
+            font-style: italic;
+            padding: 1rem 0;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            ul.file-list li {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+            
+            .action-links {
+                margin-left: 0;
+                margin-top: 0.5rem;
+                width: 100%;
+                flex-wrap: wrap;
+            }
+            
+            .action-links a {
+                padding: 0.3rem 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-section">
+        <h2>📁 My Folders</h2>
+        <ul class="file-list">
+            {% for folder in folders %}
+                <li>
+                    <a href="{% url 'view_folder' folder.id %}">{{ folder.name }}</a>
+                </li>
+            {% empty %}
+                <li class="empty-state">No folders created yet</li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'create_folder' %}" class="btn-primary">➕ Create Folder</a>
+    </div>
+
+    <div class="dashboard-section">
+        <h2>📄 My Files</h2>
+        <ul class="file-list">
+            {% for file in files %}
+                <li>
+                    <span>{{ file.name }}</span>
+                    <div class="action-links">
+                        <a href="{{ file.file.url }}" download>🔃 Download</a>
+                        <a href="{% url 'rename_file' file.id %}">✏ Rename</a>
+                        <a href="{% url 'delete_file' file.id %}" onclick="return confirm('Are you sure?');">❌ Delete</a>
+                        <a href="{% url 'share_file' file.id %}">🔗 Share</a>
+                    </div>
+                </li>
+            {% empty %}
+                <li class="empty-state">No files uploaded yet</li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'upload_file' %}" class="btn-primary">➕ Upload File</a>
+    </div>
+
+    <div class="dashboard-section">
+        <h2>🔗 Shared Files</h2>
+        <ul class="file-list">
+            {% for file in shared_files %}
+                <li>
+                    <span>{{ file.name }} (Shared by {{ file.uploaded_by.username }})</span>
+                    <div class="action-links">
+                        <a href="{{ file.file.url }}" download>🔃 Download</a>
+                    </div>
+                </li>
+            {% empty %}
+                <li class="empty-state">No shared files yet</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

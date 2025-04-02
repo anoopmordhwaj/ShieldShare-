@@ -1,0 +1,170 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>File Shared Successfully! ✅</h2>
+
+<p>🔗 Here is the expiring link: <a href="../../download_link/{{expiring_link}}">{{ expiring_link }}</a></p>
+
+<p>This link will expire in a few minutes.</p>
+
+<a href="{% url 'dashboard' %}">Go Back to Dashboard</a>
+
+</body>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Shared Successfully | CloudVault</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Color Palette */
+            --success-green: #10B981;
+            --success-light: #D1FAE5;
+            --text-dark: #1F2937;
+            --text-medium: #6B7280;
+            --accent-blue: #3B82F6;
+            --light-bg: #F9FAFB;
+            --white: #FFFFFF;
+            
+            /* Typography */
+            --font-heading: 'Poppins', sans-serif;
+            --font-body: 'Poppins', sans-serif;
+            
+            /* Effects */
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: var(--font-body);
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .success-container {
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 500px;
+            padding: 40px;
+            text-align: center;
+            border-top: 6px solid var(--success-green);
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--success-green);
+            font-family: var(--font-heading);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .link-container {
+            background: var(--success-light);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 30px 0;
+            word-break: break-all;
+            border-left: 4px solid var(--success-green);
+        }
+
+        .link-container a {
+            color: var(--accent-blue);
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .link-container a:hover {
+            text-decoration: underline;
+        }
+
+        p {
+            margin-bottom: 10px;
+            color: var(--text-medium);
+            font-weight: 500;
+        }
+
+        .expiry-note {
+            font-size: 0.95rem;
+            margin-bottom: 30px;
+        }
+
+        .dashboard-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 24px;
+            background: var(--accent-blue);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: var(--transition);
+            gap: 8px;
+        }
+
+        .dashboard-link:hover {
+            background: #2563EB;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+        }
+
+        .dashboard-link::before {
+            content: "←";
+        }
+
+        .success-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--success-green);
+            animation: bounce 0.8s;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-20px);}
+            60% {transform: translateY(-10px);}
+        }
+    </style>
+</head>
+<body>
+    <div class="success-container">
+        <div class="success-icon">✅</div>
+        <h2>File Shared Successfully!</h2>
+        
+        <div class="link-container">
+            <p>🔗 Here is your expiring download link:</p>
+            <a href="../../download_link/{{expiring_link}}">{{ expiring_link }}</a>
+        </div>
+        
+        <p class="expiry-note">This link will expire in a few minutes.</p>
+        
+        <a href="{% url 'dashboard' %}" class="dashboard-link">Go Back to Dashboard</a>
+    </div>
+</body>
+</html>

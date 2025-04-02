@@ -1,0 +1,250 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View</title>
+</head>
+<body>
+    <h2>{{ folder.name }}</h2>
+
+<h3>Subfolders</h3>
+<ul>
+    {% for subfolder in subfolders %}
+        <li><a href="{% url 'view_folder' subfolder.id %}">{{ subfolder.name }}</a></li>
+    {% endfor %}
+</ul>
+
+<h3>Files</h3>
+<ul>
+    {% for file in files %}
+        <li>{{ file.name }} - <a href="{{ file.file.url }}" download>Download</a></li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'create_folder' %}">➕ Create Folder</a>
+<a href="{% url 'upload_file' %}">➕ Upload File</a>
+
+</body>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ folder.name }} | CloudVault</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Color Palette */
+            --primary: #6C63FF;
+            --primary-light: #E0DEFF;
+            --text-dark: #2E2E3A;
+            --text-medium: #6E6D7A;
+            --light-bg: #F8FAFF;
+            --card-bg: #FFFFFF;
+            --border: #E7E7E9;
+            --success: #10B981;
+            --danger: #EF4444;
+            
+            /* Typography */
+            --font-heading: 'Poppins', sans-serif;
+            --font-body: 'Poppins', sans-serif;
+            
+            /* Effects */
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: var(--font-body);
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        h2::before {
+            content: "📁";
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin: 30px 0 20px;
+            color: var(--text-dark);
+            font-weight: 600;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--primary-light);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .item-list {
+            list-style: none;
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .list-item {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: var(--transition);
+        }
+
+        .list-item:hover {
+            background-color: rgba(108, 99, 255, 0.03);
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+        }
+
+        .folder-icon::before {
+            content: "📂";
+            margin-right: 10px;
+        }
+
+        .file-icon::before {
+            content: "📄";
+            margin-right: 10px;
+        }
+
+        .action-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+
+        .action-link:hover {
+            background-color: var(--primary-light);
+        }
+
+        .download-link {
+            color: var(--success);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #564FD9;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .empty-message {
+            color: var(--text-medium);
+            font-style: italic;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>{{ folder.name }}</h2>
+            <div class="action-buttons">
+                <a href="{% url 'create_folder' %}" class="btn btn-primary">➕ Create Folder</a>
+                <a href="{% url 'upload_file' %}" class="btn btn-primary">📤 Upload File</a>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <div>
+                <h3>Subfolders</h3>
+                <ul class="item-list">
+                    {% for subfolder in subfolders %}
+                        <li class="list-item">
+                            <a href="{% url 'view_folder' subfolder.id %}" class="action-link folder-icon">{{ subfolder.name }}</a>
+                        </li>
+                    {% empty %}
+                        <li class="empty-message">No subfolders</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div>
+                <h3>Files</h3>
+                <ul class="item-list">
+                    {% for file in files %}
+                        <li class="list-item">
+                            <span class="file-icon">{{ file.name }}</span>
+                            <a href="{{ file.file.url }}" download class="action-link download-link">Download</a>
+                        </li>
+                    {% empty %}
+                        <li class="empty-message">No files</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

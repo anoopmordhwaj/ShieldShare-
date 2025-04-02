@@ -1,0 +1,255 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload</title>
+</head>
+<body>
+
+    <h1>Upload File</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        Enter File Name:  {{ form.name }}
+        <br><br>
+        Select File: {{ form.file }}
+        <br><br>
+        <button type="submit">Upload</button>
+    </form>
+    
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload File | FileShare</title>
+    <style>
+        :root {
+            --white-bg: #ffffff;
+            --light-gray: #f5f5f5;
+            --border-gray: #e0e0e0;
+            --text-dark: #333333;
+            --text-light: #777777;
+            --accent-red: #ff4d4d;
+            --accent-green: #2ecc71;
+            --accent-red-light: rgba(255, 77, 77, 0.08);
+            --accent-green-light: rgba(46, 204, 113, 0.08);
+            --shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+        
+        body {
+            background-color: var(--white-bg);
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        
+        .upload-container {
+            width: 100%;
+            max-width: 500px;
+            background: var(--white-bg);
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-gray);
+            transition: all 0.3s ease;
+        }
+        
+        .upload-container:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+        
+        .form-group {
+            margin-bottom: 1.8rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.6rem;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 0.9rem;
+            background: var(--light-gray);
+            border: 1px solid var(--border-gray);
+            border-radius: 8px;
+            font-size: 1rem;
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-green);
+            box-shadow: 0 0 0 3px var(--accent-green-light);
+        }
+        
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .file-input-button {
+            border: 2px dashed var(--border-gray);
+            border-radius: 8px;
+            padding: 2rem 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: var(--light-gray);
+        }
+        
+        .file-input-button:hover {
+            border-color: var(--accent-red);
+            background-color: var(--accent-red-light);
+        }
+        
+        .file-input-button i {
+            font-size: 2.5rem;
+            color: var(--accent-red);
+            margin-bottom: 0.8rem;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+        
+        .file-input-button:hover i {
+            transform: scale(1.1);
+        }
+        
+        .file-input-button span {
+            color: var(--text-light);
+        }
+        
+        input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        button[type="submit"] {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--accent-green);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        button[type="submit"]:hover {
+            background-color: #27ae60;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(46, 204, 113, 0.3);
+        }
+        
+        .file-name {
+            margin-top: 0.8rem;
+            font-size: 0.9rem;
+            color: var(--accent-green);
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        /* When file is selected */
+        .file-selected {
+            border-color: var(--accent-green) !important;
+            background-color: var(--accent-green-light) !important;
+        }
+        
+        .file-selected i {
+            color: var(--accent-green) !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="upload-container">
+        <h1>Upload Your File</h1>
+        
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="id_name">File Name</label>
+                {{ form.name }}
+            </div>
+            
+            <div class="form-group">
+                <label>Select File</label>
+                <div class="file-input-wrapper">
+                    <div class="file-input-button" id="upload-area">
+                        <i>📁</i>
+                        <span>Click to browse or drag and drop</span>
+                        {{ form.file }}
+                    </div>
+                </div>
+                <div id="file-name" class="file-name">No file selected</div>
+            </div>
+            
+            <button type="submit">Upload File</button>
+        </form>
+    </div>
+
+    <script>
+        // Display selected file name and change styles
+        const uploadArea = document.getElementById('upload-area');
+        const fileInput = document.getElementById('id_file');
+        
+        fileInput.addEventListener('change', function(e) {
+            const fileName = e.target.files[0] ? e.target.files[0].name : 'No file selected';
+            document.getElementById('file-name').textContent = fileName;
+            
+            if (e.target.files[0]) {
+                uploadArea.classList.add('file-selected');
+            } else {
+                uploadArea.classList.remove('file-selected');
+            }
+        });
+        
+        // Add drag and drop highlight
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = 'var(--accent-red)';
+            uploadArea.style.backgroundColor = 'var(--accent-red-light)';
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            if (!fileInput.files.length) {
+                uploadArea.style.borderColor = 'var(--border-gray)';
+                uploadArea.style.backgroundColor = 'var(--light-gray)';
+            }
+        });
+    </script>
+</body>
+</html>

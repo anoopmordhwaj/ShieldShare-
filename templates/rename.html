@@ -1,0 +1,240 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rename</title>
+</head>
+<body>
+  
+
+<h2>Rename File</h2>
+<form method="post">
+    {% csrf_token %}
+    <label for="new_name">New File Name:</label>
+    <input type="text" name="new_name" id="new_name" value="{{ file.name }}" required>
+    <button type="submit">Rename</button>
+</form>
+<a href="{% url 'dashboard' %}">⬅ Back to Dashboard</a>
+
+
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rename File | CloudVault</title>
+    <style>
+        :root {
+            --white-bg: #ffffff;
+            --light-gray: #f0fdf4;  /* Green-50 */
+            --border-gray: #bbf7d0; /* Green-200 */
+            --text-dark: #052e16;  /* Green-900 */
+            --text-light: #4d7c0f; /* Green-700 */
+            
+            /* Green Color Palette */
+            --accent-primary: #16a34a;  /* Green-600 */
+            --accent-secondary: #22c55e; /* Green-500 */
+            --accent-dark: #15803d;     /* Green-700 */
+            --accent-light: #86efac;    /* Green-300 */
+            
+            --shadow: 0 4px 20px rgba(22, 163, 74, 0.15);
+            --gradient-bg: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        body {
+            background: var(--gradient-bg);
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            background: var(--white-bg);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 500px;
+            padding: 40px;
+            border: 1px solid rgba(22, 163, 74, 0.1);
+        }
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            color: var(--accent-primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+        }
+        h2 svg {
+            width: 32px;
+            height: 32px;
+            color: var(--accent-primary);
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        label {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--accent-dark);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        input {
+            padding: 16px 20px;
+            border: 2px solid var(--border-gray);
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background-color: rgba(22, 163, 74, 0.03);
+        }
+        input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.2);
+            background-color: var(--white-bg);
+        }
+        button {
+            background: var(--accent-primary);
+            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(22, 163, 74, 0.4);
+            background: linear-gradient(135deg, var(--accent-dark) 0%, var(--accent-primary) 100%);
+        }
+        button svg {
+            width: 22px;
+            height: 22px;
+            stroke-width: 3px;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            color: var(--accent-primary);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        .back-link:hover {
+            text-decoration: none;
+            transform: translateX(-5px);
+            color: var(--accent-dark);
+        }
+        .back-link svg {
+            width: 20px;
+            height: 20px;
+            stroke-width: 3px;
+            transition: transform 0.3s;
+        }
+        .back-link:hover svg {
+            transform: translateX(-3px);
+        }
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(22, 163, 74, 0.05);
+            border-radius: 12px;
+            border-left: 4px solid var(--accent-primary);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .file-info svg {
+            width: 28px;
+            height: 28px;
+            color: var(--accent-primary);
+        }
+        .file-info span {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        .current-name {
+            font-weight: 700;
+            color: var(--accent-primary);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+            </svg>
+            RENAME FILE
+        </h2>
+        
+        <div class="file-info">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+            <span>Current file: <span class="current-name">{{ file.name }}</span></span>
+        </div>
+        
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="new_name">NEW FILE NAME</label>
+                <input type="text" name="new_name" id="new_name" value="{{ file.name }}" required>
+            </div>
+            
+            <button type="submit">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+                </svg>
+                UPDATE FILENAME
+            </button>
+        </form>
+        
+        <a href="{% url 'dashboard' %}" class="back-link">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+            RETURN TO DASHBOARD
+        </a>
+    </div>
+</body>
+</html>

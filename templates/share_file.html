@@ -1,0 +1,260 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Share</title>
+</head>
+<body>
+    <h2>Share "{{ file.name }}"</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Share File</button>
+</form>
+<a href="{% url 'dashboard' %}">Cancel</a>
+
+{% if expiring_link %}
+    <p>🔗 Expiring Link: <a href="../../download_link/{{expiring_link}}">{{ expiring_link }}</a></p>
+{% endif %}
+
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Share "{{ file.name }}" | CloudVault</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Enhanced Color Palette */
+            --primary: #6C63FF;       /* Vibrant purple-blue */
+            --primary-dark: #564FD9;  /* Darker shade */
+            --secondary: #4D8BFF;     /* Bright blue */
+            --accent: #FF6584;        /* Vibrant pink */
+            --light-bg: #F8FAFF;      /* Very light blue */
+            --card-bg: #FFFFFF;
+            --text-dark: #2E2E3A;     /* Dark navy */
+            --text-medium: #6E6D7A;   /* Medium gray */
+            --text-light: #9E9EA7;    /* Light gray */
+            --border: #E7E7E9;
+            --success: #4CC9F0;       /* Bright cyan */
+            
+            /* Typography */
+            --font-heading: 'Poppins', sans-serif;
+            --font-body: 'Poppins', sans-serif;
+            
+            /* Effects */
+            --shadow: 0 8px 24px rgba(108, 99, 255, 0.12);
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: var(--font-body);
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .share-container {
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 500px;
+            padding: 40px;
+            border: 1px solid rgba(108, 99, 255, 0.08);
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: var(--text-dark);
+            font-family: var(--font-heading);
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        h2::before {
+            content: "↗";
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+            letter-spacing: -0.2px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 16px 18px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            background-color: rgba(108, 99, 255, 0.03);
+            color: var(--text-dark);
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.1);
+            background-color: var(--card-bg);
+        }
+
+        button[type="submit"] {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            letter-spacing: -0.2px;
+        }
+
+        button[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(108, 99, 255, 0.25);
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+        }
+
+        button[type="submit"]::before {
+            content: "🔗";
+            font-size: 1.2rem;
+        }
+
+        .cancel-link {
+            display: inline-flex;
+            align-items: center;
+            margin-top: 24px;
+            color: var(--text-medium);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            gap: 8px;
+        }
+
+        .cancel-link:hover {
+            color: var(--primary);
+            transform: translateX(-4px);
+        }
+
+        .cancel-link::before {
+            content: "←";
+            font-size: 1.1rem;
+        }
+
+        .expiring-link {
+            margin-top: 32px;
+            padding: 18px;
+            background: rgba(77, 139, 255, 0.05);
+            border-radius: 12px;
+            border-left: 4px solid var(--success);
+            font-weight: 500;
+        }
+
+        .expiring-link a {
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            word-break: break-all;
+            display: inline-block;
+            margin-top: 6px;
+        }
+
+        .expiring-link a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        .expiring-link::before {
+            content: "⏳";
+            margin-right: 10px;
+            font-size: 1.2rem;
+            color: var(--success);
+        }
+
+        small {
+            color: var(--text-light);
+            font-weight: 400;
+            font-size: 0.85rem;
+            display: block;
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="share-container">
+        <h2>Share "{{ file.name }}"</h2>
+        
+        <form method="post">
+            {% csrf_token %}
+            
+            {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}
+                <small>{{ field.help_text }}</small>
+                {% endif %}
+            </div>
+            {% endfor %}
+            
+            <button type="submit">Share File</button>
+        </form>
+        
+        <a href="{% url 'dashboard' %}" class="cancel-link">Cancel</a>
+
+        {% if expiring_link %}
+        <div class="expiring-link">
+            <p>Expiring Link:</p>
+            <a href="../../download_link/{{expiring_link}}">{{ expiring_link }}</a>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
