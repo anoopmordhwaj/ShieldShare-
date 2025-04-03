@@ -189,6 +189,8 @@
     </style>
 </head>
 <body>
+    <a href="{% url 'Logout' %}" >Logout</a>
+
     <div class="dashboard-section">
         <h2>📁 My Folders</h2>
         <ul class="file-list">
@@ -208,7 +210,7 @@
         <ul class="file-list">
             {% for file in files %}
                 <li>
-                    <span>{{ file.name }}</span>
+                    <b><span>{{ file.name }}</span></b><span>Uploaded at: {{ file.uploaded_at }}</span>
                     <div class="action-links">
                         <a href="{{ file.file.url }}" download>🔃 Download</a>
                         <a href="{% url 'rename_file' file.id %}">✏ Rename</a>
@@ -223,7 +225,7 @@
         <a href="{% url 'upload_file' %}" class="btn-primary">➕ Upload File</a>
     </div>
 
-    <div class="dashboard-section">
+    <!-- <div class="dashboard-section">
         <h2>🔗 Shared Files</h2>
         <ul class="file-list">
             {% for file in shared_files %}
@@ -237,6 +239,6 @@
                 <li class="empty-state">No shared files yet</li>
             {% endfor %}
         </ul>
-    </div>
+    </div> -->
 </body>
 </html>

@@ -31,7 +31,7 @@
             --text-dark: #1F2937;
             --text-medium: #6B7280;
             --accent-blue: #3B82F6;
-            --light-bg: #F9FAFB;
+            --light-bg: #e4eef8;
             --white: #FFFFFF;
             
             /* Typography */
@@ -159,7 +159,9 @@
         
         <div class="link-container">
             <p>🔗 Here is your expiring download link:</p>
-            <a href="../../download_link/{{expiring_link}}">{{ expiring_link }}</a>
+            <!-- <a href="../../download_link/{{expiring_link}}">{{ expiring_link }}</a> -->
+            <a href="../../download_link/{{expiring_link}}">https://{{ request.get_host }}/download_link/{{ expiring_link }}/</a>
+            
         </div>
         
         <p class="expiry-note">This link will expire in a few minutes.</p>
